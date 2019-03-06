@@ -1,6 +1,8 @@
 package com.eqxiu.office.recruit.service.bean;
 
 import com.alibaba.fastjson.JSONObject;
+import com.eqxiu.office.recruit.register.RegisterCenter;
+import com.eqxiu.office.recruit.service.business.Authentication;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,12 +13,37 @@ public class ReqBean {
     private String token;
     private Map<String, Object> parameter;
 
-    private boolean ok = false;
+    private RespBean verifyResp;
 
     public static ReqBean parseReqBean(String s){
-        return null;
+        ReqBean bean = new ReqBean();
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(s);
+            bean.setApiCode(jsonObject.getString("apiCode"));
+            bean.setToken(jsonObject.getString("token"));
+            bean.setParameter(jsonObject.getJSONObject("parameter"));
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return bean;
     }
 
+    public static ReqBean verify(ReqBean req) {
+        if (req == null) {
+            req = new ReqBean();
+            req.verifyResp =  RespBean.newError("request parameter parsing error");
+        } else if (!RegisterCenter.containsKey(req.getApiCode())){
+            req.verifyResp =  RespBean.newError("api_code[ "+ req.getApiCode() + " ] unregistered error");
+        } else if (!Authentication.checkToken(req.getToken())) {
+            req.verifyResp =  RespBean.newError("token invalidation");
+        }
+        return req;
+    }
+
+    public RespBean errorResp(){
+        return verifyResp;
+    }
 
     public String getApiCode() {
         return apiCode;
@@ -43,20 +70,15 @@ public class ReqBean {
     }
 
     public String toJsonString() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("api_code", apiCode);
-        map.put("token", token);
-        map.put("parameter", parameter);
-        return new JSONObject(map).toString();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("api_code", apiCode);
+        jsonObject.put("token", token);
+        jsonObject.put("parameter", parameter);
+        return jsonObject.toString();
     }
 
-    public ReqBean verify(String... params){
-        if (apiCode != null && !apiCode.isEmpty())
-            ok = true;
-        return this;
-    }
-
-    public boolean isOk(){
-        return ok;
+    @Override
+    public String toString() {
+        return toJsonString();
     }
 }

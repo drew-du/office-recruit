@@ -22,8 +22,6 @@ public class Field {
     private String range;
     @Column(name = "enable")
     private int enable;
-    @Column(name = "field_value")
-    private String value;
 
     public Field(){}
 
@@ -73,14 +71,6 @@ public class Field {
 
     public void setEnable(int enable) {
         this.enable = enable;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
     public boolean isEnable(){

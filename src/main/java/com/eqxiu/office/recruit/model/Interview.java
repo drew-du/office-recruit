@@ -3,6 +3,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Entity
 @Table(name = "interview")
@@ -20,6 +21,8 @@ public class Interview {
     private String status;
     @Column(name = "result")
     private String result;
+    @Column(name = "date_time")
+    private Date dateTime;
 
     public Interview(){}
 
@@ -69,5 +72,13 @@ public class Interview {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 }

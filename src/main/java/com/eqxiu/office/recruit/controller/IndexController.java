@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 public class IndexController {
@@ -41,5 +43,21 @@ public class IndexController {
         }
     }
 
+    @RequestMapping(path="/recruit/test")
+    public String test(){
+        try {
+            InputStream inputStream = IndexController.class.getResourceAsStream("/test-page.html");
+            StringBuilder sb = new StringBuilder();
+            byte[] bytes = new byte[1024];
+            while(inputStream.read(bytes) != -1){
+                sb.append(new String(bytes, StandardCharsets.UTF_8));
+            }
+            return sb.toString();
+        } catch (IOException e){
+            e.printStackTrace();
+            return "the page you are looking for flew away, haha";
+        }
+
+    }
 
 }

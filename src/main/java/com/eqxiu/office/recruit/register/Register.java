@@ -1,4 +1,4 @@
-package com.eqxiu.office.recruit.service;
+package com.eqxiu.office.recruit.register;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
